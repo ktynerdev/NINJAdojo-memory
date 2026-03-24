@@ -23,7 +23,7 @@ export default class GameScene extends Phaser.Scene {
         this.buttons = [];
 
         this.actions.forEach((action, index) => {
-            let btn = this.add.text(150, 200 + index * 50, action, {
+            let btn = this.add.text(150, 240 + index * 100, action, {
                 fontSize: '30px',
                 backgroundColor: '#444',
                 padding: { x: 10, y: 5 }
