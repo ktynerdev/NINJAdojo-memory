@@ -11,7 +11,7 @@ export default class GameScene extends Phaser.Scene {
         this.acceptingInput = false;
         this.correctCount = 0;
         this.totalRounds = 0;
-        this.paperLanterns = [];
+        this.pepperLanterns = [];
 
         this.drawBackground();
         this.createHUD();
@@ -179,7 +179,7 @@ export default class GameScene extends Phaser.Scene {
 
         if (correct) {
             this.feedbackText.setText('✅');
-            this.addPaperLantern();
+            this.addPepperLantern();
             this.round++;
 
             if (this.round > 10) {
@@ -191,13 +191,13 @@ export default class GameScene extends Phaser.Scene {
         } else {
             this.feedbackText.setText('❌');
             this.round = 1;
-            this.clearPaperLanterns();
+            this.clearPepperLanterns();
             this.time.delayedCall(1200, () => this.startRound());
         }
     }
 
-    addPaperLantern() {
-        const x = 30 + this.paperLanterns.length * 35;
+    addPepperLantern() {
+        const x = 30 + this.pepperLanterns.length * 35;
         const y = 260;
 
         const g = this.add.graphics();
@@ -213,11 +213,11 @@ export default class GameScene extends Phaser.Scene {
         g.fillStyle(0x49c15b, 1);
         g.fillTriangle(x - 4, y - 6, x, y - 14, x + 5, y - 6);
 
-        this.paperLanterns.push(g);
+        this.pepperLanterns.push(g);
     }
 
-    clearpaperLanterns() {
-        this.paperLanterns.forEach(g => g.destroy());
-        this.paperLanterns = [];
+    clearPepperLanterns() {
+        this.pepperLanterns.forEach(g => g.destroy());
+        this.pepperLanterns = [];
     }
 }
