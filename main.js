@@ -1,77 +1,25 @@
-import GameScene from './scenes/GameScene.js';
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
 
-const SUPABASE_URL = 'https://qjyoivpepfmnkoogvtao.supabase.co';
-const SUPABASE_ANON_KEY = 'sb_publishable_TfymH3Mi6DjDmlaYfrxS1w_hkFZU8oP';
+  <title>NINJAdojo-memory</title>
 
-let supabaseClient = null;
+  <!-- Phaser -->
+  <script src="https://cdn.jsdelivr.net/npm/phaser@3.60.0/dist/phaser.js"></script>
 
-if (window.supabase && SUPABASE_URL !== 'https://qjyoivpepfmnkoogvtao.supabase.co' && SUPABASE_ANON_KEY !== 'sb_publishable_TfymH3Mi6DjDmlaYfrxS1w_hkFZU8oP') {
-    supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-}
+  <!-- Supabase (for parent data logging) -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
-const config = {
-    type: Phaser.AUTO,
-    width: 430,
-    height: 760,
-    parent: 'game',
-    backgroundColor: '#08122c',
-    scene: [GameScene],
-    scale: {
-        mode: Phaser.Scale.FIT,
-        autoCenter: Phaser.Scale.CENTER_BOTH
-    }
-};
+  <!-- Styles -->
+  <link rel="stylesheet" href="style.css">
+</head>
 
-const game = new Phaser.Game(config);
+<body>
+  <div id="game"></div>
 
-window.addEventListener('ninjadojo-session-update', async (event) => {
-    const payload = event.detail;
-    console.log('APP_RECEIVED_SESSION_UPDATE', payload);
-
-    localStorage.setItem('ninjadojo_last_session', JSON.stringify(payload));
-
-    if (!supabaseClient) return;
-
-    try {
-        const { error } = await supabaseClient
-            .from('game_sessions')
-            .upsert([{
-                session_id: payload.session_id,
-                child_id: payload.child_id,
-                age_band: payload.age_band,
-                game_id: payload.game_id,
-                started_at: payload.started_at,
-                updated_at: payload.updated_at,
-                round: payload.round,
-                score: payload.score,
-                accuracy_percent: payload.accuracy_percent,
-                correct_rounds: payload.correct_rounds,
-                total_rounds: payload.total_rounds,
-                best_round: payload.best_round,
-                best_combo_length: payload.best_combo_length,
-                average_reaction_ms: payload.average_reaction_ms,
-                lantern_count: payload.lantern_count,
-                completion_status: payload.completion_status,
-                event_type: payload.event_type,
-                round_data: payload.round_data
-            }], { onConflict: 'session_id' });
-
-        if (error) {
-            console.error('Supabase session upsert failed:', error);
-        }
-    } catch (err) {
-        console.error('Supabase logging error:', err);
-    }
-});
-
-window.NinjaDojoDebug = {
-    getLastSession() {
-        const raw = localStorage.getItem('ninjadojo_last_session');
-        return raw ? JSON.parse(raw) : null;
-    },
-    clearLogs() {
-        localStorage.removeItem('ninjadojo_last_session');
-        localStorage.removeItem('ninjadojo_round_logs');
-        console.log('NINJAdojo-memory logs cleared');
-    }
-};
+  <!-- Main game entry -->
+  <script type="module" src="main.js"></script>
+</body>
+</html>
