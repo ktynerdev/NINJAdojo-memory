@@ -11,7 +11,7 @@ export default class GameScene extends Phaser.Scene {
         this.actions = ['LEFT', 'RIGHT', 'UP', 'DOWN'];
 
         this.text = this.add.text(100, 50, 'Watch the combo', {
-            fontSize: '20px',
+            fontSize: '28px',
             fill: '#ffffff'
         });
 
@@ -24,7 +24,7 @@ export default class GameScene extends Phaser.Scene {
 
         this.actions.forEach((action, index) => {
             let btn = this.add.text(150, 200 + index * 50, action, {
-                fontSize: '24px',
+                fontSize: '30px',
                 backgroundColor: '#444',
                 padding: { x: 10, y: 5 }
             })
