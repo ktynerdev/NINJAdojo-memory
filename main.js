@@ -1,25 +1,38 @@
-<!DOCTYPE html>
-<html>
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+import GameScene from './scenes/GameScene.js';
 
-  <title>NINJAdojo-memory</title>
+const config = {
+    type: Phaser.AUTO,
+    width: 430,
+    height: 760,
+    parent: 'game',
+    backgroundColor: '#08122c',
+    scene: [GameScene],
+    scale: {
+        mode: Phaser.Scale.FIT,
+        autoCenter: Phaser.Scale.CENTER_BOTH
+    }
+};
 
-  <!-- Phaser -->
-  <script src="https://cdn.jsdelivr.net/npm/phaser@3.60.0/dist/phaser.js"></script>
+const game = new Phaser.Game(config);
 
-  <!-- Supabase (for parent data logging) -->
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+// Optional app-side listener for parent dashboard testing
+window.addEventListener('ninjadojo-session-update', (event) => {
+    console.log('APP_RECEIVED_SESSION_UPDATE', event.detail);
+});
 
-  <!-- Styles -->
-  <link rel="stylesheet" href="style.css">
-</head>
-
-<body>
-  <div id="game"></div>
-
-  <!-- Main game entry -->
-  <script type="module" src="main.js"></script>
-</body>
-</html>
+// Helper functions you can call from browser console during testing
+window.NinjaDojoDebug = {
+    getLastSession() {
+        const raw = localStorage.getItem('ninjadojo_last_session');
+        return raw ? JSON.parse(raw) : null;
+    },
+    getRoundLogs() {
+        const raw = localStorage.getItem('ninjadojo_round_logs');
+        return raw ? JSON.parse(raw) : [];
+    },
+    clearLogs() {
+        localStorage.removeItem('ninjadojo_last_session');
+        localStorage.removeItem('ninjadojo_round_logs');
+        console.log('NINJAdojo-memory logs cleared');
+    }
+};
